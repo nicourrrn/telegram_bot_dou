@@ -6,11 +6,9 @@ authors = ["Sorokin Vadym <s57111702@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pyTelegramBotAPI = "^4.5.1"
 feedparser = "^6.0.10"
 SQLAlchemy = "^1.4.36"
-aiohttp = "^3.8.1"
-PyYAML = "^6.0"
+aiogram = "^2.20"
 
 [tool.poetry.dev-dependencies]
 
