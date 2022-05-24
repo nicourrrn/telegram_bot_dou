@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import asyncio
 
 from aiogram import Bot, Dispatcher, executor
-from aiogram.types import Message
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 import database as db
 import parcer
@@ -23,20 +23,26 @@ categories = {
     "Developer": ("", "Developer")
 }
 
+keyboard = ReplyKeyboardMarkup([
+    [KeyboardButton("Project Manager"), KeyboardButton("DevOps"), KeyboardButton("QA Engineer")],
+    [KeyboardButton("Business Analyst"), KeyboardButton("UI/UX Designer"), KeyboardButton("HR")],
+    [KeyboardButton("Software Architect"), KeyboardButton("Developer")]
+])
+
 
 @dp.message_handler(commands=['start'])
 async def start(message: Message):
-    profession = message.text.replace("_", " ").split(" ")
-    if len(profession) < 2:
-        await message.reply("Incorrect link, please, input command /start [YOUR_PROFESSION]")
-        return
-    if " ".join(profession[1:]) not in categories.keys():
-        await message.reply(f"Profession {' '.join(profession[1:])} not found")
-        return
-    await message.answer(f"Hello, {message.from_user.first_name}, from work bot, you added to list")
-
+    message_words = message.text.replace("_", " ").split(" ")
+    category = ""
+    if len(message_words) < 2 and " ".join(message_words[1:]) not in categories.keys():
+        await message.reply("Please, select your profession",
+                            reply_markup=keyboard)
+    else:
+        await message.answer(f"Hello, {message.from_user.first_name}, from work bot, you added to list")
+        last_vacancy = (await parcer.get_feeds(*categories[" ".join(message_words[1:])]))[0]
+        await message.answer(f"{last_vacancy['title']}\n{last_vacancy['link']}")
     new_client = db.Client(id=message.from_user.id,
-                           category=" ".join(profession[1:]),
+                           category=category,
                            name=message.from_user.first_name,
                            last_vacancy_time=datetime.now() - timedelta(days=1))
     with db.Session() as session:
@@ -55,6 +61,18 @@ async def stop(message: Message):
         session.commit()
         await message.answer("Bye!")
 
+
+@dp.message_handler(lambda message: message.text in categories.keys())
+async def get_category(message: Message):
+    await message.answer("Thanks!", reply_markup=ReplyKeyboardRemove())
+    last_vacancy = (await parcer.get_feeds(*categories[message.text]))[0]
+    await message.answer(f"{last_vacancy['title']}\n{last_vacancy['link']}")
+    with db.Session() as session:
+        client = session.get(db.Client, message.from_user.id)
+        client.category = message.text
+        client.last_vacancy_time = datetime.now()
+        session.add(client)
+        session.commit()
 
 async def send_vacancies():
     session = db.Session()
