@@ -4,15 +4,15 @@ from datetime import datetime, timedelta
 
 
 class FeedUpdater:
-    base_url = "https://jobs.dou.ua/vacancies/feeds/?exp=0-1"
+    base_url = "https://jobs.dou.ua/vacancies/feeds/?"
     categories = {
         "Project Manager": ("Project+Manager", ""),
-        "Software Architect": ("Architect", ""),
+        "Software Architect": ("Architect", "", ""),
         "UI/UX Designer": ("Design", "UX+UI"),
         "QA Engineer": ("QA", ""),
         "HR": ("HR", ""),
         "DevOps": ("DevOps", ""),
-        "Business Analyst": ("", "Business+Analyst"),
+        "Business Analyst": ("", "Business+Analyst", ""),
         "Developer": ("", "Developer")
     }
 
@@ -40,8 +40,9 @@ class FeedUpdater:
             self.get_from_time(self.last_update[category], temp)
         self.last_update[category] = datetime.now()
 
-    def get_feeds(self, category: str, search: str) -> list[dict]:
-        feed = feedparser.parse(f"{self.base_url}&category={category}&search={search}").entries
+    def get_feeds(self, category: str, search: str, exp="0-1") -> list[dict]:
+        print(f"{self.base_url}&category={category}&search={search}&exp={exp}")
+        feed = feedparser.parse(f"{self.base_url}&category={category}&search={search}&exp={exp}").entries
         for i, f in enumerate(feed):
             feed[i].published_parsed = datetime.fromtimestamp(mktime(f.published_parsed))
         return feed

@@ -9,7 +9,7 @@ import database as db
 from parcer import FeedUpdater
 
 # В строку ниже нужно вставить токен
-bot_token = "1285311895:AAEW8x29YCw3Ux_5yx6e1wVW4VVbpVvKHg4"
+bot_token = ""
 bot = Bot(bot_token)
 dp = Dispatcher(bot)
 fu = FeedUpdater()
@@ -30,7 +30,7 @@ async def start(message: Message):
                             reply_markup=keyboard)
     else:
         await message.answer(f"Hello, {message.from_user.first_name}, from work bot, you added to list")
-        await message.answer(f"Please wait vacancies")
+        await message.answer(f"Please wait for vacancies")
         # await message.answer(f"{last_vacancy['title']}\n{last_vacancy['link']}")
     new_client = db.Client(id=message.from_user.id,
                            category=category,
@@ -68,12 +68,12 @@ async def get_category(message: Message):
 async def send_vacancies():
     session = db.Session()
     for category in fu.categories.keys():
-        print(category)
-        last_vacancy = await fu.pop_category(category)
-        print(last_vacancy)
         clients: sqlalchemy.orm.Query = session.query(db.Client) \
             .filter_by(category=category)
         clients = clients.all()
+        if len(clients) == 0: continue
+        last_vacancy = await fu.pop_category(category)
+        if last_vacancy is None: last_vacancy = {"title": "Sorry, but vacancies not fount", "link": ""}
         for client in clients:
             await bot.send_message(client.id, f"{last_vacancy['title']}\n{last_vacancy['link']}")
             session.add(client)
