@@ -7,8 +7,8 @@ from aiogram.types import Message
 import database as db
 import parcer
 
-
-bot_token = "5121135624:AAGYcoQmMDLElLGIS_Qo8F7DOGmeaFc3Kcs"
+# В строку ниже нужно вставить токен
+bot_token = ""
 bot = Bot(bot_token)
 dp = Dispatcher(bot)
 

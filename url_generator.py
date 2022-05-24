@@ -1,4 +1,5 @@
 bot_username = input("Введите ник бота: ").replace("@", "").replace(" ", "")
+
 categories = {
     "Project Manager": ("Project+Manager", ""),
     "Software Architect": ("Architect", ""),

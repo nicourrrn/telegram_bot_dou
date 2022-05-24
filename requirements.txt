@@ -1,17 +1,17 @@
-aiogram @ file:///home/nicourrrn/.cache/pypoetry/artifacts/40/a3/2e/5694b982736611a8d2893ec1ecbcc382f26022adf2fa40d935fcec8bdf/aiogram-2.20-py3-none-any.whl
-aiohttp @ file:///home/nicourrrn/.cache/pypoetry/artifacts/ec/c9/b8/045a900f6bd96c4ad567ba36e5cac7b7c00d1a7d0d53999cac47495ef0/aiohttp-3.8.1-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl
-aiosignal @ file:///home/nicourrrn/.cache/pypoetry/artifacts/30/30/0d/903be6c7ed45c2c0427a2a18486bb6ceb0a700c346a94414b6b395e16e/aiosignal-1.2.0-py3-none-any.whl
-async-timeout @ file:///home/nicourrrn/.cache/pypoetry/artifacts/5e/15/15/173c5bae6f8d28fa399857d021326b2b05fc2debcbc7bcae7c5bf79891/async_timeout-4.0.2-py3-none-any.whl
-attrs @ file:///home/nicourrrn/.cache/pypoetry/artifacts/c4/ee/75/fcd6c2f4c5a1d60b1bcd97014702ca01b3f032fd927d88780b38708409/attrs-21.4.0-py2.py3-none-any.whl
-Babel @ file:///home/nicourrrn/.cache/pypoetry/artifacts/ed/4e/c7/8c4387255e163b817646635c2c88a7debca2361b2ae43c3a455fca786b/Babel-2.9.1-py2.py3-none-any.whl
-certifi @ file:///home/nicourrrn/.cache/pypoetry/artifacts/8c/ef/5f/67cf35ca016dcd84174e483e20fc3cfcd8bf39b6852e96236e852f31ba/certifi-2022.5.18.1-py3-none-any.whl
-charset-normalizer @ file:///home/nicourrrn/.cache/pypoetry/artifacts/d5/27/31/db4fb74906e3a7f55f720e0079ac1850dd86e30651cdfa5e1f04c53cfa/charset_normalizer-2.0.12-py3-none-any.whl
-feedparser @ file:///home/nicourrrn/.cache/pypoetry/artifacts/5b/0d/9e/d8410da5e80dc39a6904c1198c935dfe6bcbf962a39569aa884f447874/feedparser-6.0.10-py3-none-any.whl
-frozenlist @ file:///home/nicourrrn/.cache/pypoetry/artifacts/ec/80/77/bdf92e2c93e0459cdcd039035f23def398b35a35e695631bef3abdb209/frozenlist-1.3.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-greenlet @ file:///home/nicourrrn/.cache/pypoetry/artifacts/34/c1/37/e49d0edb98c16a44953cc207d5e589f3a94eed158e24cb8fcd1047b4ff/greenlet-1.1.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-idna @ file:///home/nicourrrn/.cache/pypoetry/artifacts/90/36/8c/81eabf6ac88608721ab27f439c9a6b9a8e6a21cc58c59ebb1a42720199/idna-3.3-py3-none-any.whl
-multidict @ file:///home/nicourrrn/.cache/pypoetry/artifacts/fc/03/de/7ff4d4eef94dd924e44bf6a7cd431a49013f48825f82687d4ba8bbb1e1/multidict-6.0.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-pytz @ file:///home/nicourrrn/.cache/pypoetry/artifacts/76/c4/54/e82c514018d400ab72bc3cc53469bd3b519f30e674c7d905fd7c872314/pytz-2022.1-py2.py3-none-any.whl
-sgmllib3k @ file:///home/nicourrrn/.cache/pypoetry/artifacts/8d/cf/63/3a357945db29f2cfa790dae30e0150b9bbf5fadc590026223f5f652eac/sgmllib3k-1.0.0.tar.gz
-SQLAlchemy @ file:///home/nicourrrn/.cache/pypoetry/artifacts/01/e5/ae/851aa226ceaa10cd5610eb02a212391247161d72ae049ec896bb19ba92/SQLAlchemy-1.4.36-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-yarl @ file:///home/nicourrrn/.cache/pypoetry/artifacts/ab/46/71/ee32588139cc0f07f94e65cac6c281e6376e186842dbe17a31b0c4ea0f/yarl-1.7.2-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl
+aiogram==2.20
+aiohttp==3.8.1
+aiosignal==1.2.0
+async-timeout==4.0.2
+attrs==21.4.0
+Babel==2.9.1
+certifi==2022.5.18.1
+charset-normalizer==2.0.12
+feedparser==6.0.10
+frozenlist==1.3.0
+greenlet==1.1.2
+idna==3.3
+multidict==6.0.2
+pytz==2022.1
+sgmllib3k==1.0.0
+SQLAlchemy==1.4.36
+yarl==1.7.2
