@@ -7,7 +7,7 @@ authors = ["Sorokin Vadym <s57111702@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 feedparser = "^6.0.10"
-SQLAlchemy = "^1.4.36"
+SQLAlchemy = {extras = ["asyncio"], version = "^1.4.36"}
 aiogram = "^2.20"
 
 [tool.poetry.dev-dependencies]

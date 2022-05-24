@@ -1,27 +1,18 @@
 from datetime import datetime, timedelta
 import asyncio
 
+import sqlalchemy.orm.query
 from aiogram import Bot, Dispatcher, executor
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 import database as db
-import parcer
+from parcer import FeedUpdater
 
 # В строку ниже нужно вставить токен
-bot_token = ""
+bot_token = "1285311895:AAEW8x29YCw3Ux_5yx6e1wVW4VVbpVvKHg4"
 bot = Bot(bot_token)
 dp = Dispatcher(bot)
-
-categories = {
-    "Project Manager": ("Project+Manager", ""),
-    "Software Architect": ("Architect", ""),
-    "UI/UX Designer": ("Design", "UX+UI"),
-    "QA Engineer": ("QA", ""),
-    "HR": ("HR", ""),
-    "DevOps": ("DevOps", ""),
-    "Business Analyst": ("", "Business+Analyst"),
-    "Developer": ("", "Developer")
-}
+fu = FeedUpdater()
 
 keyboard = ReplyKeyboardMarkup([
     [KeyboardButton("Project Manager"), KeyboardButton("DevOps"), KeyboardButton("QA Engineer")],
@@ -34,13 +25,13 @@ keyboard = ReplyKeyboardMarkup([
 async def start(message: Message):
     message_words = message.text.replace("_", " ").split(" ")
     category = ""
-    if len(message_words) < 2 and " ".join(message_words[1:]) not in categories.keys():
+    if len(message_words) < 2 and " ".join(message_words[1:]) not in FeedUpdater.categories.keys():
         await message.reply("Please, select your profession",
                             reply_markup=keyboard)
     else:
         await message.answer(f"Hello, {message.from_user.first_name}, from work bot, you added to list")
-        last_vacancy = (await parcer.get_feeds(*categories[" ".join(message_words[1:])]))[0]
-        await message.answer(f"{last_vacancy['title']}\n{last_vacancy['link']}")
+        await message.answer(f"Please wait vacancies")
+        # await message.answer(f"{last_vacancy['title']}\n{last_vacancy['link']}")
     new_client = db.Client(id=message.from_user.id,
                            category=category,
                            name=message.from_user.first_name,
@@ -62,11 +53,10 @@ async def stop(message: Message):
         await message.answer("Bye!")
 
 
-@dp.message_handler(lambda message: message.text in categories.keys())
+@dp.message_handler(lambda message: message.text in fu.categories.keys())
 async def get_category(message: Message):
-    await message.answer("Thanks!", reply_markup=ReplyKeyboardRemove())
-    last_vacancy = (await parcer.get_feeds(*categories[message.text]))[0]
-    await message.answer(f"{last_vacancy['title']}\n{last_vacancy['link']}")
+    await message.answer("Thanks! Wait new vacancies", reply_markup=ReplyKeyboardRemove())
+    # await message.answer(f"{last_vacancy['title']}\n{last_vacancy['link']}")
     with db.Session() as session:
         client = session.get(db.Client, message.from_user.id)
         client.category = message.text
@@ -74,16 +64,18 @@ async def get_category(message: Message):
         session.add(client)
         session.commit()
 
+
 async def send_vacancies():
     session = db.Session()
-    for category, params in categories.items():
-        last_vacancy = (await parcer.get_feeds(*params))[0]
-        clients = session.query(db.Client) \
-            .filter(db.Client.category == category,
-                    db.Client.last_vacancy_time < last_vacancy.published_parsed)
+    for category in fu.categories.keys():
+        print(category)
+        last_vacancy = await fu.pop_category(category)
+        print(last_vacancy)
+        clients: sqlalchemy.orm.Query = session.query(db.Client) \
+            .filter_by(category=category)
+        clients = clients.all()
         for client in clients:
             await bot.send_message(client.id, f"{last_vacancy['title']}\n{last_vacancy['link']}")
-            client.last_vacancy_time = datetime.now()
             session.add(client)
     session.commit()
     session.close()
@@ -99,9 +91,12 @@ async def send_vacancies_by_period(period=60):
 
 
 async def main():
-    await asyncio.gather(dp.start_polling(), send_vacancies_by_period(10))
+    await asyncio.gather(send_vacancies_by_period(15), dp.start_polling())
+
 
 try:
     executor.start(dp, main())
 except KeyboardInterrupt:
     print("Good bye")
+except Exception as e:
+    print(e)
